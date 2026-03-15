@@ -1,148 +1,123 @@
 # The Health Portfolio: Severity-Weighted OR-Gate Evaluation of Clinical AI Ensembles
 
-**Paper:** Deobhakta, A. A. (2026). "Concordance Collapse and the Health Portfolio: Why the Metric You Choose Determines Whether AI Ensembles Save Patients or Waste Resources." Working Paper, SSRN.
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+
+## Papers
+
+**NPJ Digital Medicine (in preparation):**
+Deobhakta, A. A. (2026). "Severity-weighted utility and concordant-miss analysis reveal clinically important complementarity in multi-AI diabetic retinopathy screening systems that standard discrimination metrics can miss."
+
+**SSRN Working Paper (posted):**
+Deobhakta, A. A. (2026). "Concordance Collapse and the Health Portfolio: Why the Metric You Choose Determines Whether AI Ensembles Save Patients or Waste Resources." Working Paper, SSRN. https://doi.org/10.2139/ssrn.XXXXXXX
 
 ## Summary
 
-Standard evaluation metrics (AUC) show no ensemble benefit when pairing clinical AI screening models. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy by 39-68% across two independent datasets, with zero concordant grade 4 misses achievable.
+Standard evaluation metrics (AUC) show no ensemble benefit when pairing clinical AI screening models. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy by 39–68% across two independent datasets (EyePACS and APTOS). The key findings:
 
-The evaluation methodology, not the ensemble method, was the bottleneck all along.
-
-## Key Findings
-
-| Finding | EyePACS | APTOS |
-|---------|---------|-------|
-| Best single model AUC | 0.911 | 0.964 |
-| AUC-based ensemble lift | +0.006 (max) | minimal |
-| OR-gate cost reduction | -39% | -68% |
-| Zero G4 concordant misses | 3 pairs | 2 pairs |
-| rho vs concordant miss (r) | 0.73 | 0.33 |
+- **AUC says ensembles don't help.** 51 of 55 model pairs show zero or negative AUC lift.
+- **Severity-weighted OR-gate evaluation says they do.** The best pair reduces severity-weighted cost by 39% (EyePACS) and 68% (APTOS).
+- **96% of the benefit comes from the OR-gate rule**, not the evaluation metric (2×2 factorial decomposition).
+- **OR-gate dominates threshold-optimized single models** at matched operating points.
+- **Error correlation (ρ) predicts concordant-miss risk** (r = 0.665 [95% CI: 0.456–0.797]).
+- **Results are robust** across 5 clinically plausible severity-weight scenarios and bootstrap resampling (n = 1,000).
 
 ## Repository Structure
 
 ```
 health-portfolio/
-  README.md                    # This file
-  requirements.txt             # Python dependencies
-  notebooks/
-    01_data_preparation.py     # Download and preprocess EyePACS + APTOS
-    02_train_models.py         # Train all 11 models
-    03_evaluate_eyepacs.py     # Full evaluation on EyePACS test set
-    04_evaluate_aptos.py       # External validation on APTOS
-    05_or_gate_analysis.py     # OR-gate severity-weighted analysis
-  configs/
-    severity_weights.json      # Literature-derived QALY-based weights
-    model_configs.json         # Architecture and training hyperparameters
-  scripts/
-    dataset.py                 # Dataset classes (binary and 5-class)
-    models.py                  # Model definitions including RETFound wrappers
-    evaluation.py              # Evaluation functions (AUC, OR-gate, severity cost)
-    utils.py                   # Shared utilities
-  results/
-    eyepacs_individual.csv     # Individual model results on EyePACS
-    eyepacs_pairwise.csv       # All 55 pairwise results on EyePACS
-    aptos_individual.csv       # Individual model results on APTOS
-    aptos_pairwise.csv         # All 55 pairwise results on APTOS
+├── configs/              # Model training configuration files
+├── scripts/
+│   ├── dataset.py        # Data loading and preprocessing (EyePACS, APTOS)
+│   ├── models.py         # Model definitions (DenseNet121, EfficientNet, ResNet50, ViT, RETFound)
+│   └── evaluation.py     # Evaluation framework (AUC, OR-gate, severity-weighted cost)
+├── notebooks/            # Colab notebooks for training and analysis
+│   ├── notebook1_data_setup.ipynb
+│   ├── notebook2_training.ipynb
+│   └── notebook3_robustness_analysis.ipynb
+├── results/
+│   └── npj_robustness_results.json   # Key results for NPJ revision
+├── requirements.txt
+├── LICENSE
+└── README.md
 ```
-
-## Reproducing the Results
-
-### Prerequisites
-
-- Python 3.10+
-- PyTorch 2.0+ with CUDA support
-- An NVIDIA GPU with at least 16GB VRAM (A100 recommended for RETFound models)
-- A HuggingFace account with access to [RETFound](https://huggingface.co/iszt/RETFound_mae_meh)
-
-### Step 1: Environment Setup
-
-```bash
-git clone https://github.com/[username]/health-portfolio.git
-cd health-portfolio
-pip install -r requirements.txt
-huggingface-cli login  # Enter your HF token for RETFound access
-```
-
-### Step 2: Download Data
-
-Download the following datasets from Kaggle (requires a Kaggle account):
-
-- **EyePACS:** [Diabetic Retinopathy Detection](https://www.kaggle.com/c/diabetic-retinopathy-detection)
-- **APTOS:** [APTOS 2019 Blindness Detection](https://www.kaggle.com/c/aptos2019-blindness-detection)
-
-Place the downloaded files in `data/eyepacs/raw/` and `data/aptos/raw/` respectively.
-
-### Step 3: Preprocess Data
-
-```bash
-python notebooks/01_data_preparation.py
-```
-
-This resizes all images to 256x256 PNG, creates stratified train/val/test splits for EyePACS (70/15/15), and prepares APTOS as a full external test set.
-
-### Step 4: Train Models
-
-```bash
-python notebooks/02_train_models.py
-```
-
-Trains all 11 models sequentially, saving checkpoints to `models/`. Each model skips training if a checkpoint already exists (safe for interrupted runs). Estimated time: 4-6 hours on a single A100 GPU.
-
-### Step 5: Evaluate
-
-```bash
-python notebooks/03_evaluate_eyepacs.py
-python notebooks/04_evaluate_aptos.py
-python notebooks/05_or_gate_analysis.py
-```
-
-Generates all results tables and figures reported in the paper.
 
 ## Models
 
-| Model | Architecture | Task | Parameters | EyePACS AUC | APTOS AUC |
-|-------|-------------|------|------------|-------------|-----------|
-| densenet121_binary | DenseNet121 | Binary | 8M | 0.897 | 0.959 |
-| densenet121_5class | DenseNet121 | 5-class | 8M | 0.911 | 0.958 |
-| efficientnet_b3_binary | EfficientNet-B3 | Binary | 12M | 0.859 | 0.949 |
-| efficientnet_b3_5class | EfficientNet-B3 | 5-class | 12M | 0.867 | 0.954 |
-| resnet50_binary | ResNet50 | Binary | 25M | 0.878 | 0.958 |
-| resnet50_5class | ResNet50 | 5-class | 25M | 0.872 | 0.958 |
-| vit_base_binary | ViT-Base | Binary | 86M | 0.848 | 0.944 |
-| vit_base_5class | ViT-Base | 5-class | 86M | 0.848 | 0.950 |
-| retfound_binary | RETFound | Binary | 304M | 0.870 | 0.963 |
-| retfound_5class | RETFound | 5-class | 304M | 0.881 | 0.959 |
-| retfound_adversarial | RETFound | Adversarial | 304M | 0.870 | 0.964 |
+11 deep learning models spanning 5 architectures, each in binary and 5-class formulations:
 
-## Severity Weights
+| Architecture | Binary | 5-Class | Notes |
+|---|---|---|---|
+| DenseNet121 | ✓ | ✓ | Best individual model (5-class) |
+| EfficientNet-B3 | ✓ | ✓ | Top ensemble partner |
+| ResNet50 | ✓ | ✓ | |
+| ViT-Base | ✓ | ✓ | |
+| RETFound | ✓ | ✓ | Retinal foundation model (Zhou et al. 2023) |
+| RETFound (adversarial) | ✓ | — | Adversarial decorrelation variant |
 
-Derived from clinical economics literature:
+## Datasets
 
-| Error Type | Weight | Source |
-|-----------|--------|--------|
-| Grade 4 miss (PDR) | 500 | DRCR Protocol S; Schmier et al. 2020 |
-| Grade 3 miss (Severe NPDR) | 200 | ETDRS (50% progression to PDR in 1 year) |
-| Grade 2 miss (Moderate NPDR) | 15 | ETDRS (23% progression in 4 years) |
-| Grade 1 miss | 2 | Low immediate risk |
-| False positive | 1 | Unnecessary referral ($200-500) |
+- **EyePACS**: 88,702 retinal fundus images, 5-level DR severity grading. [Kaggle](https://www.kaggle.com/c/diabetic-retinopathy-detection)
+- **APTOS 2019**: 3,662 retinal images, same grading scheme (external validation). [Kaggle](https://www.kaggle.com/c/aptos2019-blindness-detection)
+
+Both datasets require accepting competition rules on Kaggle before download.
+
+## Reproducing Results
+
+### Requirements
+```bash
+pip install -r requirements.txt
+```
+
+### Step 1: Data Setup
+Run `notebooks/notebook1_data_setup.ipynb` in Google Colab (GPU required). This downloads and preprocesses both datasets. Requires a Kaggle API token.
+
+### Step 2: Model Training
+Run `notebooks/notebook2_training.ipynb`. Trains all 11 models on EyePACS. Approximate time: 48 GPU-hours on NVIDIA T4.
+
+### Step 3: Evaluation and Robustness Analysis
+Run `notebooks/notebook3_robustness_analysis.ipynb`. Generates all results including threshold sweep, 2×2 decomposition, weight robustness, and bootstrap CIs. Output saved to `results/npj_robustness_results.json`.
+
+## Severity-Weighted Cost Framework
+
+| Error Type | Weight | Clinical Basis |
+|---|---|---|
+| Missed Grade 4 (PDR) | 1,000 | QALY loss 0.214/yr; 50% 1-yr progression to blindness |
+| Missed Grade 3 (severe NPDR) | 500 | Lower but substantial progression risk |
+| False positive | 1 | Cost of unnecessary referral |
+
+Sources: Moshfeghi et al. (2020), ETDRS Report No. 9, Javitt et al. (1996).
+
+## Key Results
+
+### Top Ensemble: DenseNet121 (5-class) + EfficientNet (5-class)
+
+| Metric | EyePACS | APTOS |
+|---|---|---|
+| Solo severity cost | 6,468 [4,435–8,812] | 1,570 |
+| OR-gate severity cost | 3,972 [2,820–5,554] | 499 |
+| Cost reduction | 39.2% | 68.2% |
+| Concordant severe misses | 6 [2–11] | 1 |
+| Error correlation (ρ) | 0.549 [0.497–0.595] | 0.77 |
 
 ## Citation
 
+If you use this code or methodology, please cite:
+
 ```bibtex
-@article{deobhakta2026concordance,
-  title={Concordance Collapse and the Health Portfolio: Why the Metric You Choose Determines Whether AI Ensembles Save Patients or Waste Resources},
+@article{deobhakta2026health_portfolio,
+  title={Severity-weighted utility and concordant-miss analysis reveal clinically important complementarity in multi-{AI} diabetic retinopathy screening systems that standard discrimination metrics can miss},
   author={Deobhakta, Avnish Arvind},
   year={2026},
-  journal={Working Paper, SSRN}
+  note={In preparation for NPJ Digital Medicine}
 }
 ```
-
-## Related Papers
-
-- Deobhakta, A. A. (2026a). "Within-Task Competence Heterogeneity and the Shape of Technological Displacement." SSRN.
-- Deobhakta, A. A. (2026b). "Estimating Within-Task Competence Heterogeneity (kappa)." SSRN.
-- Deobhakta, A. A. (2026c). "Vetter's Paradox in Real Data." SSRN.
 
 ## License
 
 MIT License. See [LICENSE](LICENSE) for details.
+
+## Author
+
+**Avnish Arvind Deobhakta, M.D.**
+Department of Ophthalmology, The New York Eye and Ear Infirmary of Mount Sinai
+Icahn School of Medicine at Mount Sinai, New York, NY
