@@ -1,0 +1,39 @@
+{
+  "severity_weights": {
+    "grade_4_miss": {
+      "weight": 500,
+      "condition": "Proliferative Diabetic Retinopathy (PDR)",
+      "clinical_basis": "Immediate sight-threatening. Risk of irreversible blindness within months without treatment.",
+      "economic_basis": "Treatment cost $60K-$160K lifetime (DRCR Protocol S). QALY loss from bilateral blindness: 0.214/yr x 30yr = 6.42 QALYs. At $50K/QALY: ~$320K societal cost.",
+      "sources": ["DRCR Protocol S", "Schmier et al. 2020", "Javitt et al. 1996"]
+    },
+    "grade_3_miss": {
+      "weight": 200,
+      "condition": "Severe Non-Proliferative Diabetic Retinopathy (Severe NPDR)",
+      "clinical_basis": "50% progress to PDR within 1 year without treatment (ETDRS).",
+      "economic_basis": "Expected cost: 0.5 x Grade 4 cost, time-discounted.",
+      "sources": ["ETDRS Report No. 9 (1991)"]
+    },
+    "grade_2_miss": {
+      "weight": 15,
+      "condition": "Moderate Non-Proliferative Diabetic Retinopathy (Moderate NPDR)",
+      "clinical_basis": "23% progression over 4 years (ETDRS). Requires monitoring.",
+      "economic_basis": "Expected cost: 0.23 x Grade 4 cost x time discount.",
+      "sources": ["ETDRS Report No. 9 (1991)"]
+    },
+    "grade_1_miss": {
+      "weight": 2,
+      "condition": "Mild Non-Proliferative Diabetic Retinopathy (Mild NPDR)",
+      "clinical_basis": "Low immediate risk. Annual monitoring recommended.",
+      "economic_basis": "Minimal incremental cost from delayed detection."
+    },
+    "false_positive": {
+      "weight": 1,
+      "condition": "Unnecessary specialist referral",
+      "clinical_basis": "Patient anxiety, time cost, follow-up visit.",
+      "economic_basis": "Direct cost $200-$500 per unnecessary referral.",
+      "note": "Baseline unit. All other weights are relative to this."
+    }
+  },
+  "note": "Weights are deliberately conservative. The true societal cost ratio of a missed PDR case to a false referral is closer to 1600:1 than 500:1. We compress the ratio to bias against our hypothesis."
+}
