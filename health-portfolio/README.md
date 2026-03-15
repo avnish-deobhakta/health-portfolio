@@ -1,6 +1,6 @@
 # The Health Portfolio: Severity-Weighted OR-Gate Evaluation of Clinical AI Ensembles
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.XXXXXXX.svg)](https://doi.org/10.5281/zenodo.XXXXXXX)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19039636.svg)](https://doi.org/10.5281/zenodo.19039636)
 
 ## Papers
 
