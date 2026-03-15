@@ -1,0 +1,195 @@
+{
+  "individual_models": {
+    "DN121_Binary": {
+      "auc": 0.8974343488029377,
+      "cost": 9067,
+      "severe_misses": 17
+    },
+    "DN121_5Class": {
+      "auc": 0.9109058294880777,
+      "cost": 6490,
+      "severe_misses": 11
+    },
+    "RF_Binary": {
+      "auc": 0.8698156995144106,
+      "cost": 10799,
+      "severe_misses": 24
+    },
+    "RF_5Class": {
+      "auc": 0.8810585425071871,
+      "cost": 9197,
+      "severe_misses": 20
+    },
+    "RF_Adversarial": {
+      "auc": 0.8697734218346098,
+      "cost": 10314,
+      "severe_misses": 22
+    }
+  },
+  "all_ensembles": [
+    {
+      "n1": "DN121_Binary",
+      "n2": "DN121_5Class",
+      "type": "TASK DIV",
+      "auc": 0.9164774237189862,
+      "auc_lift": 0.005571594230908472,
+      "rho": 0.6813850029577727,
+      "cost": 6144,
+      "cost_diff": -346,
+      "severe_misses": 10,
+      "severe_net": 1,
+      "g4_miss": 4,
+      "g3_miss": 6,
+      "fp": 64
+    },
+    {
+      "n1": "DN121_Binary",
+      "n2": "RF_Binary",
+      "type": "ARCH DIV",
+      "auc": 0.9065814268112965,
+      "auc_lift": -0.004324402676781247,
+      "rho": 0.5404644701657917,
+      "cost": 9460,
+      "cost_diff": 2970,
+      "severe_misses": 19,
+      "severe_net": -8,
+      "g4_miss": 8,
+      "g3_miss": 11,
+      "fp": 65
+    },
+    {
+      "n1": "DN121_Binary",
+      "n2": "RF_5Class",
+      "type": "BOTH",
+      "auc": 0.9107861685550696,
+      "auc_lift": -0.00011966093300819214,
+      "rho": 0.5437243235343603,
+      "cost": 8733,
+      "cost_diff": 2243,
+      "severe_misses": 17,
+      "severe_net": -6,
+      "g4_miss": 7,
+      "g3_miss": 10,
+      "fp": 53
+    },
+    {
+      "n1": "DN121_Binary",
+      "n2": "RF_Adversarial",
+      "type": "BOTH",
+      "auc": 0.9070751697146862,
+      "auc_lift": -0.003830659773391587,
+      "rho": 0.5534372568342365,
+      "cost": 8332,
+      "cost_diff": 1842,
+      "severe_misses": 16,
+      "severe_net": -5,
+      "g4_miss": 6,
+      "g3_miss": 10,
+      "fp": 62
+    },
+    {
+      "n1": "DN121_5Class",
+      "n2": "RF_Binary",
+      "type": "BOTH",
+      "auc": 0.9108960150266954,
+      "auc_lift": -9.81446138237363e-06,
+      "rho": 0.5590819136113935,
+      "cost": 6690,
+      "cost_diff": 200,
+      "severe_misses": 12,
+      "severe_net": -1,
+      "g4_miss": 3,
+      "g3_miss": 9,
+      "fp": 45
+    },
+    {
+      "n1": "DN121_5Class",
+      "n2": "RF_5Class",
+      "type": "ARCH DIV",
+      "auc": 0.9142865339550165,
+      "auc_lift": 0.003380704466938722,
+      "rho": 0.5830537355723748,
+      "cost": 6663,
+      "cost_diff": 173,
+      "severe_misses": 12,
+      "severe_net": -1,
+      "g4_miss": 3,
+      "g3_miss": 9,
+      "fp": 48
+    },
+    {
+      "n1": "DN121_5Class",
+      "n2": "RF_Adversarial",
+      "type": "BOTH",
+      "auc": 0.9115354649336844,
+      "auc_lift": 0.0006296354456066799,
+      "rho": 0.5654997882439906,
+      "cost": 6629,
+      "cost_diff": 139,
+      "severe_misses": 12,
+      "severe_net": -1,
+      "g4_miss": 3,
+      "g3_miss": 9,
+      "fp": 44
+    },
+    {
+      "n1": "RF_Binary",
+      "n2": "RF_5Class",
+      "type": "TASK DIV",
+      "auc": 0.8781149590510473,
+      "auc_lift": -0.03279087043703044,
+      "rho": 0.8576143695318518,
+      "cost": 9678,
+      "cost_diff": 3188,
+      "severe_misses": 21,
+      "severe_net": -10,
+      "g4_miss": 5,
+      "g3_miss": 16,
+      "fp": 78
+    },
+    {
+      "n1": "RF_Binary",
+      "n2": "RF_Adversarial",
+      "type": "TASK DIV",
+      "auc": 0.8709307733191602,
+      "auc_lift": -0.0399750561689175,
+      "rho": 0.9398082334585033,
+      "cost": 10310,
+      "cost_diff": 3820,
+      "severe_misses": 22,
+      "severe_net": -11,
+      "g4_miss": 6,
+      "g3_miss": 16,
+      "fp": 75
+    },
+    {
+      "n1": "RF_5Class",
+      "n2": "RF_Adversarial",
+      "type": "TASK DIV",
+      "auc": 0.8787317602010001,
+      "auc_lift": -0.03217406928707767,
+      "rho": 0.8553080351650132,
+      "cost": 9217,
+      "cost_diff": 2727,
+      "severe_misses": 19,
+      "severe_net": -8,
+      "g4_miss": 5,
+      "g3_miss": 14,
+      "fp": 77
+    }
+  ],
+  "severity_weights": {
+    "grade_4_miss": 500,
+    "grade_3_miss": 200,
+    "grade_2_miss": 15,
+    "grade_1_miss": 2,
+    "false_positive": 1
+  },
+  "best_single": {
+    "name": "DN121_5Class",
+    "auc": 0.9109058294880777,
+    "cost": 6490
+  },
+  "test_severe_cases": 130,
+  "concordant_misses": 5
+}

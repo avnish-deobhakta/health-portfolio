@@ -1,0 +1,107 @@
+{
+  "individual_models": {
+    "DN121_Binary": {
+      "auc": 0.8974343488029377,
+      "cost": 9067,
+      "severe_misses": 17
+    },
+    "DN121_5Class": {
+      "auc": 0.9109058294880777,
+      "cost": 6490,
+      "severe_misses": 11
+    },
+    "RF_Binary": {
+      "auc": 0.8698156995144106,
+      "cost": 10799,
+      "severe_misses": 24
+    },
+    "RF_5Class": {
+      "auc": 0.8810585425071871,
+      "cost": 9197,
+      "severe_misses": 20
+    },
+    "RF_Adversarial": {
+      "auc": 0.8697734218346098,
+      "cost": 10314,
+      "severe_misses": 22
+    }
+  },
+  "ensembles": {
+    "DN121_Binary+DN121_5Class": {
+      "desc": "Same arch, task diversity",
+      "auc": 0.9164774237189862,
+      "lift": 0.005571594230908472,
+      "rho": 0.6813850029577727,
+      "severity_cost": 6144,
+      "cost_vs_best": -346,
+      "severe_net_rescue": 1
+    },
+    "DN121_Binary+RF_Binary": {
+      "desc": "Diff arch, same task",
+      "auc": 0.9065814268112965,
+      "lift": -0.004324402676781247,
+      "rho": 0.5404644701657917,
+      "severity_cost": 9460,
+      "cost_vs_best": 2970,
+      "severe_net_rescue": -8
+    },
+    "DN121_Binary+RF_5Class": {
+      "desc": "Diff arch + task diversity",
+      "auc": 0.9107861685550696,
+      "lift": -0.00011966093300819214,
+      "rho": 0.5437243235343603,
+      "severity_cost": 8733,
+      "cost_vs_best": 2243,
+      "severe_net_rescue": -6
+    },
+    "DN121_Binary+RF_Adversarial": {
+      "desc": "Diff arch + adversarial",
+      "auc": 0.9070751697146862,
+      "lift": -0.003830659773391587,
+      "rho": 0.5534372568342365,
+      "severity_cost": 8332,
+      "cost_vs_best": 1842,
+      "severe_net_rescue": -5
+    },
+    "DN121_5Class+RF_5Class": {
+      "desc": "Diff arch, both 5-class",
+      "auc": 0.9142865339550165,
+      "lift": 0.003380704466938722,
+      "rho": 0.5830537355723748,
+      "severity_cost": 6663,
+      "cost_vs_best": 173,
+      "severe_net_rescue": -1
+    },
+    "DN121_5Class+RF_Binary": {
+      "desc": "Diff arch, reversed task",
+      "auc": 0.9108960150266954,
+      "lift": -9.81446138237363e-06,
+      "rho": 0.5590819136113935,
+      "severity_cost": 6690,
+      "cost_vs_best": 200,
+      "severe_net_rescue": -1
+    },
+    "RF_Binary+RF_5Class": {
+      "desc": "Same arch, task diversity",
+      "auc": 0.8781149590510473,
+      "lift": -0.03279087043703044,
+      "rho": 0.8576143695318518,
+      "severity_cost": 9678,
+      "cost_vs_best": 3188,
+      "severe_net_rescue": -10
+    }
+  },
+  "severity_weights": {
+    "grade_4_miss": 500,
+    "grade_3_miss": 200,
+    "grade_2_miss": 15,
+    "grade_1_miss": 2,
+    "false_positive": 1
+  },
+  "concordant_severe_misses": 5,
+  "test_set_size": 2900,
+  "severe_cases_in_test": 130,
+  "best_single_model": "DN121_5Class",
+  "best_single_auc": 0.9109058294880777,
+  "best_single_cost": 6490
+}

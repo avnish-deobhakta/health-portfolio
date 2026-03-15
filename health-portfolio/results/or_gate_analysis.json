@@ -1,0 +1,116 @@
+{
+  "or_gate_results": [
+    {
+      "n1": "DN121_Binary",
+      "n2": "DN121_5Class",
+      "both_catch": 108,
+      "one_catches": 16,
+      "both_miss": 6,
+      "g4_both_miss": 1,
+      "g3_both_miss": 5,
+      "improvement_over_best": 5,
+      "rho": 0.6813850029577727
+    },
+    {
+      "n1": "DN121_Binary",
+      "n2": "RF_Binary",
+      "both_catch": 98,
+      "one_catches": 23,
+      "both_miss": 9,
+      "g4_both_miss": 1,
+      "g3_both_miss": 8,
+      "improvement_over_best": 2,
+      "rho": 0.5404644701657917
+    },
+    {
+      "n1": "DN121_Binary",
+      "n2": "RF_5Class",
+      "both_catch": 101,
+      "one_catches": 21,
+      "both_miss": 8,
+      "g4_both_miss": 1,
+      "g3_both_miss": 7,
+      "improvement_over_best": 3,
+      "rho": 0.5437243235343603
+    },
+    {
+      "n1": "DN121_Binary",
+      "n2": "RF_Adversarial",
+      "both_catch": 98,
+      "one_catches": 25,
+      "both_miss": 7,
+      "g4_both_miss": 1,
+      "g3_both_miss": 6,
+      "improvement_over_best": 4,
+      "rho": 0.5534372568342365
+    },
+    {
+      "n1": "DN121_5Class",
+      "n2": "RF_Binary",
+      "both_catch": 102,
+      "one_catches": 21,
+      "both_miss": 7,
+      "g4_both_miss": 2,
+      "g3_both_miss": 5,
+      "improvement_over_best": 4,
+      "rho": 0.5590819136113935
+    },
+    {
+      "n1": "DN121_5Class",
+      "n2": "RF_5Class",
+      "both_catch": 106,
+      "one_catches": 17,
+      "both_miss": 7,
+      "g4_both_miss": 2,
+      "g3_both_miss": 5,
+      "improvement_over_best": 4,
+      "rho": 0.5830537355723748
+    },
+    {
+      "n1": "DN121_5Class",
+      "n2": "RF_Adversarial",
+      "both_catch": 103,
+      "one_catches": 21,
+      "both_miss": 6,
+      "g4_both_miss": 2,
+      "g3_both_miss": 4,
+      "improvement_over_best": 5,
+      "rho": 0.5654997882439906
+    },
+    {
+      "n1": "RF_Binary",
+      "n2": "RF_5Class",
+      "both_catch": 106,
+      "one_catches": 4,
+      "both_miss": 20,
+      "g4_both_miss": 5,
+      "g3_both_miss": 15,
+      "improvement_over_best": -9,
+      "rho": 0.8576143695318518
+    },
+    {
+      "n1": "RF_Binary",
+      "n2": "RF_Adversarial",
+      "both_catch": 106,
+      "one_catches": 2,
+      "both_miss": 22,
+      "g4_both_miss": 6,
+      "g3_both_miss": 16,
+      "improvement_over_best": -11,
+      "rho": 0.9398082334585033
+    },
+    {
+      "n1": "RF_5Class",
+      "n2": "RF_Adversarial",
+      "both_catch": 107,
+      "one_catches": 4,
+      "both_miss": 19,
+      "g4_both_miss": 5,
+      "g3_both_miss": 14,
+      "improvement_over_best": -8,
+      "rho": 0.8553080351650132
+    }
+  ],
+  "best_single_severe_misses": 11,
+  "analysis": "OR-gate deployment: flag if EITHER model says referable"
+}
