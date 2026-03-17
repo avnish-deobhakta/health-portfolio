@@ -25,11 +25,25 @@ def load_severity_weights(config_path="configs/severity_weights.json"):
     }
 
 
-def compute_severity_cost(preds, labels, grades, weights, threshold=0.5):
+def _coerce_binary_predictions(preds_or_probs, threshold=0.5):
+    """Convert probabilities or binary predictions to {0,1} integers.
+
+    Accepts either:
+      - probabilities in [0, 1]
+      - already-binary predictions in {0, 1}
+    """
+    arr = np.asarray(preds_or_probs)
+    unique_vals = np.unique(arr)
+    if np.all(np.isin(unique_vals, [0, 1])):
+        return arr.astype(int)
+    return (arr >= threshold).astype(int)
+
+
+def compute_severity_cost(preds_or_probs, labels, grades, weights, threshold=0.5):
     """Compute total severity-weighted error cost.
 
     Args:
-        preds: Array of predicted probabilities.
+        preds_or_probs: Array of predicted probabilities or binary predictions.
         labels: Array of binary ground truth labels.
         grades: Array of severity grades (0-4).
         weights: Dict mapping grade -> cost weight.
@@ -39,7 +53,7 @@ def compute_severity_cost(preds, labels, grades, weights, threshold=0.5):
         total_cost: Scalar total severity-weighted cost.
         breakdown: Dict with counts per error type.
     """
-    binary_preds = (preds >= threshold).astype(int)
+    binary_preds = _coerce_binary_predictions(preds_or_probs, threshold=threshold)
     total_cost = 0
     breakdown = {
         "grade_4_miss": 0, "grade_3_miss": 0, "grade_2_miss": 0,
@@ -65,6 +79,17 @@ def compute_severity_cost(preds, labels, grades, weights, threshold=0.5):
                 breakdown["false_positive"] += 1
 
     return total_cost, breakdown
+
+
+def summarize_cost_breakdown(breakdown):
+    """Map verbose cost breakdown keys to compact reporting keys."""
+    return {
+        "g4": breakdown["grade_4_miss"],
+        "g3": breakdown["grade_3_miss"],
+        "g2": breakdown["grade_2_miss"],
+        "g1": breakdown["grade_1_miss"],
+        "fp": breakdown["false_positive"],
+    }
 
 
 def compute_error_correlation(probs_a, probs_b, labels, threshold=0.5):
@@ -113,7 +138,7 @@ def concordant_miss_analysis(probs_a, probs_b, labels, grades, threshold=0.5):
         "both_miss_total": len(both_miss),
         "g4_both_miss": g4_miss,
         "g3_both_miss": g3_miss,
-        "both_miss_indices": both_miss,
+        "both_miss_indices": sorted(both_miss),
     }
 
 
@@ -140,7 +165,7 @@ def classify_diversity_type(name_a, name_b):
         return "SAME"
 
 
-def full_pairwise_evaluation(all_preds, labels, grades, weights):
+def full_pairwise_evaluation(all_preds, labels, grades, weights, threshold=0.5):
     """Run complete pairwise evaluation across all models.
 
     Args:
@@ -148,6 +173,7 @@ def full_pairwise_evaluation(all_preds, labels, grades, weights):
         labels: Binary ground truth array.
         grades: Severity grade array.
         weights: Severity weight dict.
+        threshold: Decision threshold used for binary actions.
 
     Returns:
         List of dicts, one per pair, with all evaluation metrics.
@@ -168,29 +194,19 @@ def full_pairwise_evaluation(all_preds, labels, grades, weights):
             ens_auc = roc_auc_score(labels, ens_probs)
 
             # Error correlation
-            rho = compute_error_correlation(probs_a, probs_b, labels)
+            rho = compute_error_correlation(probs_a, probs_b, labels, threshold=threshold)
 
-            # OR-gate cost
-            or_preds = or_gate_predictions(probs_a, probs_b)
+            # OR-gate cost (single clean path)
+            or_preds = or_gate_predictions(probs_a, probs_b, threshold=threshold)
             or_cost, or_breakdown = compute_severity_cost(
-                probs_a, labels, grades, weights  # placeholder, recompute below
+                or_preds, labels, grades, weights, threshold=threshold
             )
-            # Recompute with OR-gate predictions
-            or_cost = 0
-            or_bd = {"g4": 0, "g3": 0, "g2": 0, "fp": 0}
-            for idx in range(len(or_preds)):
-                if or_preds[idx] != labels[idx]:
-                    if labels[idx] == 1:
-                        or_cost += weights.get(grades[idx], 2)
-                        if grades[idx] == 4: or_bd["g4"] += 1
-                        elif grades[idx] == 3: or_bd["g3"] += 1
-                        elif grades[idx] == 2: or_bd["g2"] += 1
-                    else:
-                        or_cost += weights["fp"]
-                        or_bd["fp"] += 1
+            or_bd = summarize_cost_breakdown(or_breakdown)
 
             # Concordant misses
-            cm = concordant_miss_analysis(probs_a, probs_b, labels, grades)
+            cm = concordant_miss_analysis(
+                probs_a, probs_b, labels, grades, threshold=threshold
+            )
 
             # Diversity type
             div_type = classify_diversity_type(name_a, name_b)
@@ -207,6 +223,8 @@ def full_pairwise_evaluation(all_preds, labels, grades, weights):
                 "g3_both_miss": cm["g3_both_miss"],
                 "or_gate_g4_miss": or_bd["g4"],
                 "or_gate_g3_miss": or_bd["g3"],
+                "or_gate_g2_miss": or_bd["g2"],
+                "or_gate_g1_miss": or_bd["g1"],
                 "or_gate_fp": or_bd["fp"],
             })
 
