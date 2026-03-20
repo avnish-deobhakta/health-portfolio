@@ -12,11 +12,11 @@ Deobhakta, A. A. (2026). "Concordance Collapse and the Health Portfolio: Why the
 
 ## Summary
 
-Standard evaluation metrics (AUC) show no ensemble benefit when pairing clinical AI screening models. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy by 39–68% across two independent datasets (EyePACS and APTOS). The key findings:
+Standard evaluation metrics (AUC) show no ensemble benefit when pairing clinical AI screening models. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy, with the best observed ensemble reductions ranging from 38.9% on EyePACS to 68.2% on APTOS, depending on model pairing and formulation. The key findings:
 
 - **AUC says ensembles don't help.** 54 of 55 model pairs show zero or negative AUC lift.
-- **Severity-weighted OR-gate evaluation says they do.** The best pair reduces severity-weighted cost by 39% (EyePACS) and 68% (APTOS).
-- **96% of the benefit comes from the OR-gate rule**, not the evaluation metric (2×2 factorial decomposition).
+- **Severity-weighted OR-gate evaluation says they do.** The best EyePACS pair reduces severity-weighted cost by 38.9%; the best APTOS pair (a different model combination) achieves a 68.2% reduction.
+- **In a 2×2 factorial decomposition, approximately 96% of the observed benefit in the lead analysis was attributable to the OR-gate decision rule** rather than the evaluation metric itself.
 - **OR-gate dominates threshold-optimized single models** at matched operating points.
 - **Error correlation (ρ) predicts concordant-miss risk** (r = 0.725 [95% CI: 0.456–0.797]).
 - **Results are robust** across 5 clinically plausible severity-weight scenarios and bootstrap resampling (n = 1,000).
@@ -83,6 +83,8 @@ Run `notebooks/notebook2_model_training.ipynb`. Trains all 11 models on EyePACS.
 ### Step 3: Evaluation and Robustness Analysis
 Run `notebooks/notebook3_evaluation_robustness.ipynb`. Generates all results including threshold sweep, 2×2 decomposition, weight robustness, and bootstrap CIs. Output saved to `results/`.
 
+Precomputed results are included in `results/` for inspection; full regeneration requires Kaggle dataset access and GPU training.
+
 ## Severity-Weighted Cost Framework
 
 | Error Type | Weight | Clinical Basis |
@@ -97,7 +99,7 @@ Sources: Moshfeghi et al. (2020), ETDRS Report No. 9, Javitt et al. (1996). Weig
 
 ## Key Results
 
-### Top Ensemble: DenseNet121 (5-class) + EfficientNet-B3 (5-class)
+### Top EyePACS Ensemble: DenseNet121 (5-class) + EfficientNet-B3 (5-class)
 
 | Metric | EyePACS | APTOS |
 |---|---|---|
@@ -114,6 +116,12 @@ Sources: Moshfeghi et al. (2020), ETDRS Report No. 9, Javitt et al. (1996). Weig
 | OR-gate severity cost | 499 |
 | Cost reduction | 68.2% |
 | Concordant severe misses | 0 |
+
+Note: The best-performing ensemble differs between datasets. The EyePACS-optimal pair (both 5-class models) achieves a 21.5% reduction on APTOS, while a different pair (both binary models) achieves the maximum 68.2% APTOS reduction. Both results are reported in the manuscript.
+
+## Limitations
+
+This repository does not include raw retinal images or trained model checkpoint files due to dataset access restrictions and package size constraints. Reproducing results from scratch requires Kaggle dataset access and approximately 48 GPU-hours of training compute.
 
 ## Citation
 
