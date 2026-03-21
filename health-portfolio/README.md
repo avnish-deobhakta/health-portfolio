@@ -26,12 +26,13 @@ Standard evaluation metrics (AUC) show no ensemble benefit when pairing clinical
 ```
 health-portfolio/
 ├── configs/
-│   ├── model_configs.json          # Model training configurations (all 11 models)
-│   └── severity_weights.json       # Severity-weight derivation and values
+│   ├── model_configs.json              # Model training configurations (all 11 models)
+│   └── severity_weights.json           # Severity-weight derivation, values, and robustness scenarios
 ├── scripts/
-│   ├── dataset.py                  # Data loading and preprocessing (EyePACS, APTOS)
-│   ├── models.py                   # Model definitions (DenseNet121, EfficientNet, ResNet50, ViT, RETFound)
-│   └── evaluation.py               # Evaluation framework (AUC, OR-gate, severity-weighted cost)
+│   ├── dataset.py                      # Data loading and preprocessing (EyePACS, APTOS)
+│   ├── models.py                       # Model definitions (DenseNet121, EfficientNet, ResNet50, ViT, RETFound)
+│   ├── evaluation.py                   # Evaluation framework (AUC, OR-gate, severity-weighted cost)
+│   └── reproduce_results.py            # One-command reproduction from frozen predictions
 ├── notebooks/
 │   ├── notebook1_data_setup.ipynb
 │   ├── notebook2_model_training.ipynb
@@ -41,11 +42,50 @@ health-portfolio/
 │   ├── npj_robustness_results.json     # Threshold sweep, bootstrap CIs
 │   ├── exhaustive_pairwise_results.json
 │   ├── full_evaluation_results.json
-│   └── or_gate_analysis.json
+│   ├── or_gate_analysis.json
+│   ├── predictions/                    # Frozen per-image predictions (11 models × 2,900 images)
+│   └── csv/                            # Human-readable summary tables
+├── examples/
+│   └── generate_toy_data.py            # Synthetic data for pipeline validation
+├── REPRODUCIBILITY_MAP.md              # Every manuscript claim mapped to its data source
 ├── requirements.txt
+├── requirements-lock.txt               # Frozen environment (exact package versions)
 ├── LICENSE
 └── README.md
 ```
+
+## Reproducing Results
+
+### What is reproducible from included artifacts (no GPU, no Kaggle):
+
+All manuscript tables, figures, pairwise analyses, bootstrap comparisons, and key numbers can be regenerated from the frozen per-image prediction files:
+
+```bash
+pip install -r requirements-lock.txt
+python scripts/reproduce_results.py --predictions-dir results/predictions --dataset eyepacs
+```
+
+To validate the pipeline on synthetic data (no real data needed):
+
+```bash
+python examples/generate_toy_data.py
+python scripts/reproduce_results.py --toy
+```
+
+See [`REPRODUCIBILITY_MAP.md`](REPRODUCIBILITY_MAP.md) for a complete mapping of every manuscript claim to its verifiable source file.
+
+### What requires restricted-access data and GPU retraining:
+
+Model fitting from raw retinal images requires Kaggle dataset access and approximately 48 GPU-hours on NVIDIA T4.
+
+#### Step 1: Data Setup
+Run `notebooks/notebook1_data_setup.ipynb` in Google Colab (GPU required). Downloads and preprocesses both datasets. Requires a Kaggle API token.
+
+#### Step 2: Model Training
+Run `notebooks/notebook2_model_training.ipynb`. Trains all 11 models on EyePACS.
+
+#### Step 3: Evaluation and Robustness Analysis
+Run `notebooks/notebook3_evaluation_robustness.ipynb`. Generates all results including threshold sweep, 2×2 decomposition, weight robustness, and bootstrap CIs. Output saved to `results/`.
 
 ## Models
 
@@ -66,24 +106,6 @@ health-portfolio/
 - **APTOS 2019**: 3,662 retinal images, same grading scheme (external validation). [Kaggle](https://www.kaggle.com/c/aptos2019-blindness-detection)
 
 Both datasets require accepting competition rules on Kaggle before download.
-
-## Reproducing Results
-
-### Requirements
-```bash
-pip install -r requirements.txt
-```
-
-### Step 1: Data Setup
-Run `notebooks/notebook1_data_setup.ipynb` in Google Colab (GPU required). This downloads and preprocesses both datasets. Requires a Kaggle API token.
-
-### Step 2: Model Training
-Run `notebooks/notebook2_model_training.ipynb`. Trains all 11 models on EyePACS. Approximate time: 48 GPU-hours on NVIDIA T4.
-
-### Step 3: Evaluation and Robustness Analysis
-Run `notebooks/notebook3_evaluation_robustness.ipynb`. Generates all results including threshold sweep, 2×2 decomposition, weight robustness, and bootstrap CIs. Output saved to `results/`.
-
-Precomputed results are included in `results/` for inspection; full regeneration requires Kaggle dataset access and GPU training.
 
 ## Severity-Weighted Cost Framework
 
@@ -121,7 +143,7 @@ Note: The best-performing ensemble differs between datasets. The EyePACS-optimal
 
 ## Limitations
 
-This repository does not include raw retinal images or trained model checkpoint files due to dataset access restrictions and package size constraints. Reproducing results from scratch requires Kaggle dataset access and approximately 48 GPU-hours of training compute.
+This repository does not include raw retinal images or trained model checkpoint files due to dataset access restrictions and package size constraints. Reproducing results from scratch requires Kaggle dataset access and approximately 48 GPU-hours of training compute. One borderline grade-2 case (image #1023, OR-gate probability 0.497) may classify differently depending on float32 vs float64 precision, affecting the ensemble cost by ±15 (one w₂ penalty). This has no impact on any qualitative conclusion.
 
 ## Citation
 
