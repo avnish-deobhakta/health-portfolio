@@ -12,7 +12,7 @@ Deobhakta, A. A. (2026). "Concordance Collapse and the Health Portfolio: Why the
 
 ## Summary
 
-Standard evaluation metrics (AUC) show no ensemble benefit when pairing clinical AI screening models. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy, with the best observed ensemble reductions ranging from 38.9% on EyePACS to 68.2% on APTOS, depending on model pairing and formulation. The key findings:
+Standard evaluation metrics (AUC) show little or no apparent ensemble benefit across nearly all model pairings. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy, with the best observed ensemble reductions ranging from 38.9% on EyePACS to 68.2% on APTOS, depending on model pairing and formulation. The key findings:
 
 - **AUC says ensembles don't help.** 54 of 55 model pairs show zero or negative AUC lift.
 - **Severity-weighted OR-gate evaluation says they do.** The best EyePACS pair reduces severity-weighted cost by 38.9%; the best APTOS pair (a different model combination) achieves a 68.2% reduction.
@@ -121,7 +121,7 @@ Sources: Moshfeghi et al. (2020), ETDRS Report No. 9, Javitt et al. (1996). Weig
 
 ## Key Results
 
-### Top EyePACS Ensemble: DenseNet121 (5-class) + EfficientNet-B3 (5-class)
+### Lead Ensemble: DenseNet121 (5-class) + EfficientNet-B3 (5-class), Evaluated on Both Datasets
 
 | Metric | EyePACS | APTOS |
 |---|---|---|
