@@ -38,7 +38,7 @@ health-portfolio/
 │   ├── notebook2_model_training.ipynb
 │   └── notebook3_evaluation_robustness.ipynb
 ├── results/
-│   ├── comprehensive_evaluation.json   # Legacy: 55-pair results from in-memory Colab run (APTOS authoritative; EyePACS superseded by csv/)
+│   ├── comprehensive_evaluation.json   # Legacy: 55-pair results from in-memory Colab run (superseded by csv/ for both datasets; retained for archival completeness)
 │   ├── npj_robustness_results.json     # Threshold sweep, bootstrap CIs
 │   ├── exhaustive_pairwise_results.json
 │   ├── full_evaluation_results.json
