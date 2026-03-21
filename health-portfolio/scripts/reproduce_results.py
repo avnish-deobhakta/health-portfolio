@@ -153,7 +153,7 @@ def run_analysis(pred_dir, dataset, output_dir, weights, scenarios, repo_root='.
     zn = sum(1 for p in pairs if p['ensemble_auc']-best_auc<=0)
     ml = max(p['ensemble_auc']-best_auc for p in pairs)
     rhos = [p['rho'] for p in pairs]; bms = [p['concordant_severe_misses'] for p in pairs]
-    rv = np.corrcoef(rhos,bms)[0,1] if len(pairs)>2 else 0
+    rv = np.corrcoef(rhos,bms)[0,1] if len(pairs)>2 and np.std(bms)>0 and np.std(rhos)>0 else 0.0
     pd.DataFrame([
         dict(quantity='solo_severity_cost',estimate=best_cost),
         dict(quantity='or_gate_severity_cost',estimate=bp['or_gate_cost']),
@@ -166,13 +166,14 @@ def run_analysis(pred_dir, dataset, output_dir, weights, scenarios, repo_root='.
     print(f'\n{"="*70}\nKEY NUMBERS\n{"="*70}')
     print(f'  Solo cost:        {best_cost:,}')
     print(f'  Ensemble cost:    {bp["or_gate_cost"]:,}')
-    print(f'  Reduction:        {best_cost-bp["or_gate_cost"]:,} ({(best_cost-bp["or_gate_cost"])/best_cost*100:.1f}%)')
+    red_pct = (best_cost-bp['or_gate_cost'])/best_cost*100 if best_cost > 0 else 0
+    print(f'  Reduction:        {best_cost-bp["or_gate_cost"]:,} ({red_pct:.1f}%)')
     print(f'  Pair:             {bp["model_1"]} + {bp["model_2"]}')
     print(f'  Concordant SM:    {bp["concordant_severe_misses"]}')
     print(f'  FP:               {bp["fp"]}')
     print(f'  AUC lift ≤0:      {zn}/{len(pairs)}')
     print(f'  Max AUC lift:     {ml:.6f}')
-    print(f'  rho-BM r:         {rv:.3f}')
+    print(f'  rho-BM r:         {rv:.3f}' if not np.isnan(rv) else '  rho-BM r:         n/a (insufficient variance)')
     print(f'\nCSVs written to {output_dir}/')
 
 def verify_mode(pred_dir, dataset, csv_dir, repo_root):
