@@ -1,6 +1,6 @@
 # The Health Portfolio: Severity-Weighted OR-Gate Evaluation of Clinical AI Ensembles
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19039636.svg)](https://doi.org/10.5281/zenodo.19039636)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.19153932.svg)](https://doi.org/10.5281/zenodo.19153932)
 
 ## Papers
 
@@ -58,7 +58,7 @@ health-portfolio/
 
 ### What is reproducible from included artifacts (no GPU, no Kaggle):
 
-All manuscript tables, figures, pairwise analyses, bootstrap comparisons, and key numbers can be regenerated from the frozen per-image prediction files:
+EyePACS analysis results are reproducible from frozen per-image prediction files included in this archive. APTOS external-validation results are provided as frozen summary tables. To regenerate EyePACS results:
 
 ```bash
 pip install -r requirements-lock.txt
