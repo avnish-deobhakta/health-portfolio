@@ -5,7 +5,7 @@ This document maps every quantitative claim in the manuscript to its verifiable 
 ## Reproducibility Scope
 
 - **EyePACS**: Analysis-layer reproducible from frozen per-image predictions in `results/predictions/`. Run `python scripts/reproduce_results.py` to regenerate all EyePACS tables and key numbers.
-- **APTOS**: Summary-layer reproducible from frozen result tables in `results/csv/` and `results/comprehensive_evaluation.json`. Per-image APTOS predictions are not included; regeneration requires Kaggle dataset access and model inference.
+- **APTOS**: Summary-layer reproducible from frozen result tables in `results/csv/`. Per-image APTOS predictions are not included; regeneration from raw images requires Kaggle dataset access and model inference.
 - **Retraining**: Requires Kaggle dataset access and ~48 GPU-hours.
 
 ## Ground Truth Files
@@ -14,7 +14,7 @@ This document maps every quantitative claim in the manuscript to its verifiable 
 |---|---|
 | `results/predictions/` | Frozen per-image predictions (11 EyePACS models, 2,900 images each) |
 | `results/csv/` | Script-generated summary tables (single source of truth for EyePACS) |
-| `results/comprehensive_evaluation.json` | Legacy 55-pair results for EyePACS and APTOS (from in-memory Colab run; superseded by `results/csv/` for EyePACS) |
+| `results/comprehensive_evaluation.json` | Legacy 55-pair results from in-memory Colab run (superseded by `results/csv/` for both datasets; retained for archival completeness and bootstrap CI context) |
 | `results/npj_robustness_results.json` | Threshold sweep, bootstrap CIs (from in-memory Colab run) |
 | `configs/severity_weights.json` | Weight specification, derivation, and robustness scenarios |
 | `configs/model_configs.json` | All 11 model training configurations |
@@ -33,13 +33,13 @@ This document maps every quantitative claim in the manuscript to its verifiable 
 | Max AUC lift | 0.003 | Same |
 | rho-vs-BM correlation | 0.712 | Same |
 
-## APTOS Key Numbers (from `comprehensive_evaluation.json`)
+## APTOS Key Numbers (from `results/csv/aptos_pairwise_results.csv`)
 
 | Quantity | Value | Source |
 |---|---|---|
-| Best APTOS pair | DN121_bin + EffNet_bin | `comprehensive_evaluation.json` → aptos |
-| Best APTOS cost | 499 (68.2% reduction from 1,570) | Same |
-| EyePACS-optimal pair on APTOS | DN121_5c + EffNet_5c: cost 1,232 (21.5%) | Same |
+| Best APTOS pair | DN121_bin + EffNet_bin | `results/csv/aptos_pairwise_results.csv` |
+| Best APTOS cost | 499 (68.2% reduction from 1,570) | `results/csv/aptos_pairwise_results.csv` |
+| EyePACS-optimal pair on APTOS | DN121_5c + EffNet_5c: cost 1,232 (21.5%) | `results/csv/aptos_pairwise_results.csv` |
 
 ## Table-by-Table Sources
 
@@ -50,8 +50,8 @@ This document maps every quantitative claim in the manuscript to its verifiable 
 | Table 2 weight sensitivity | `results/csv/weight_sensitivity.csv` |
 | Table 3 bootstrap CIs | `results/npj_robustness_results.json` (bootstrap CIs); point estimates from `results/csv/bootstrap_summary.csv` |
 | Supplement Table 1 (EyePACS 55 pairs) | `results/csv/eyepacs_pairwise_results.csv` |
-| Supplement Table 2 (APTOS 55 pairs) | `comprehensive_evaluation.json` → aptos |
-| Supplement Table 3 (diversity summary) | Computed from `comprehensive_evaluation.json` |
+| Supplement Table 2 (APTOS 55 pairs) | `results/csv/aptos_pairwise_results.csv` |
+| Supplement Table 3 (diversity summary) | Computed from `results/csv/eyepacs_pairwise_results.csv` and `results/csv/aptos_pairwise_results.csv` |
 | Figures 1-6 | Generated from frozen predictions in Colab; pre-rendered figures embedded in manuscript |
 
 ## Methods Claims
