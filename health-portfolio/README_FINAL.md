@@ -54,6 +54,8 @@ health-portfolio/
 └── README.md
 ```
 
+Within `results/`, the authoritative pairwise outputs are the CSV files in `results/csv/`; legacy JSON files are preserved for archival completeness and for artifacts not yet regenerated from frozen predictions. See `results/README.md` for details.
+
 ## Reproducing Results
 
 ### What is reproducible from included artifacts (no GPU, no Kaggle):
