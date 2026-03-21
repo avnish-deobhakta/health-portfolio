@@ -1,0 +1,6 @@
+scenario,w4,w3,w2,w1,w_fp,solo_cost,or_gate_cost,reduction_pct,top_ensemble
+conservative,250,100,15,2,1,4790,3233,32.5%,Yes
+base_case,500,200,15,2,1,6490,3983,38.6%,Yes
+high_asymmetry,1000,200,15,2,1,8490,4483,47.2%,Yes
+extreme,1000,500,15,2,1,10590,5983,43.5%,Yes
+equal,1,1,1,1,1,287,333,-16.0%,No
