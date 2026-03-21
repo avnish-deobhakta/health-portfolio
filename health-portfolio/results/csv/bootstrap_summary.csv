@@ -1,0 +1,7 @@
+quantity,estimate
+solo_severity_cost,6490
+or_gate_severity_cost,3983
+cost_reduction,2507
+error_correlation_rho,0.5491
+concordant_severe_misses,6
+rho_vs_concordant_miss_r,0.7122
