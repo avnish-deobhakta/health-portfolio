@@ -12,13 +12,13 @@ Deobhakta, A. A. (2026). "Concordance Collapse and the Health Portfolio: Why the
 
 ## Summary
 
-Standard evaluation metrics (AUC) show little or no apparent ensemble benefit across nearly all model pairings. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy, with the best observed ensemble reductions ranging from 38.9% on EyePACS to 68.2% on APTOS, depending on model pairing and formulation. The key findings:
+Standard evaluation metrics (AUC) show little or no apparent ensemble benefit across nearly all model pairings. Severity-weighted OR-gate evaluation reveals that architecturally diverse ensembles reduce the risk of missing sight-threatening diabetic retinopathy, with the best observed ensemble reductions ranging from 38.6% on EyePACS to 68.2% on APTOS, depending on model pairing and formulation. The key findings:
 
-- **AUC says ensembles don't help.** 54 of 55 model pairs show zero or negative AUC lift.
-- **Severity-weighted OR-gate evaluation says they do.** The best EyePACS pair reduces severity-weighted cost by 38.9%; the best APTOS pair (a different model combination) achieves a 68.2% reduction.
+- **AUC suggests little apparent ensemble benefit.** 54 of 55 model pairs show zero or negative AUC lift.
+- **Severity-weighted OR-gate evaluation detects clinically meaningful ensemble benefit.** The best EyePACS pair reduces severity-weighted cost by 38.6%; the best APTOS pair (a different model combination) achieves a 68.2% reduction.
 - **In a 2×2 factorial decomposition, approximately 96% of the observed benefit in the lead analysis was attributable to the OR-gate decision rule** rather than the evaluation metric itself.
 - **OR-gate dominates threshold-optimized single models** at matched operating points.
-- **Error correlation (ρ) predicts concordant-miss risk** (r = 0.725 [95% CI: 0.456–0.797]).
+- **Error correlation (ρ) predicts concordant-miss risk** (r = 0.712 [95% CI: 0.456–0.797]).
 - **Results are robust** across 5 clinically plausible severity-weight scenarios and bootstrap resampling (n = 1,000).
 
 ## Repository Structure
@@ -126,10 +126,10 @@ Sources: Moshfeghi et al. (2020), ETDRS Report No. 9, Javitt et al. (1996). Weig
 | Metric | EyePACS | APTOS |
 |---|---|---|
 | Solo severity cost | 6,490 [4,435–8,812] | 1,570 |
-| OR-gate severity cost | 3,968 [2,820–5,554] | 1,232 |
-| Cost reduction | 38.9% | 21.5% |
+| OR-gate severity cost | 3,983 [2,820–5,554] | 1,232 |
+| Cost reduction | 38.6% | 21.5% |
 | Concordant severe misses | 6 [2–11] | 2 |
-| Error correlation (ρ) | 0.548 [0.497–0.595] | 0.77 |
+| Error correlation (ρ) | 0.549 [0.497–0.595] | 0.77 |
 
 ### Best APTOS Ensemble: DenseNet121 (binary) + EfficientNet-B3 (binary)
 
@@ -143,7 +143,7 @@ Note: The best-performing ensemble differs between datasets. The EyePACS-optimal
 
 ## Limitations
 
-This repository does not include raw retinal images or trained model checkpoint files due to dataset access restrictions and package size constraints. Reproducing results from scratch requires Kaggle dataset access and approximately 48 GPU-hours of training compute. One borderline grade-2 case (image #1023, OR-gate probability 0.497) may classify differently depending on float32 vs float64 precision, affecting the ensemble cost by ±15 (one w₂ penalty). This has no impact on any qualitative conclusion.
+This repository does not include raw retinal images or trained model checkpoint files due to dataset access restrictions and package size constraints. Reproducing results from scratch requires Kaggle dataset access and approximately 48 GPU-hours of training compute.
 
 ## Citation
 
